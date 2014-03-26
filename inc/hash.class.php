@@ -131,6 +131,7 @@ class PluginAccountsHash extends CommonDBTM {
    public function defineTabs($options=array()) {
 
       $ong = array();
+      $this->addDefaultFormTab($ong);
       $this->addStandardTab(__CLASS__, $ong, $options);
       $this->addStandardTab('PluginAccountsAesKey', $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
@@ -322,16 +323,16 @@ class PluginAccountsHash extends CommonDBTM {
       $self->getFromDB($hash_id);
       $entities = getSonsOf('glpi_entities', $self->fields['entities_id']);
 
-      $account=new PluginAccountsAccount();
-      $aeskey=new PluginAccountsAesKey();
+      $account = new PluginAccountsAccount();
+      $aeskey  = new PluginAccountsAesKey();
 
-      $oldhash = hash ( "sha256" ,$oldaeskey);
-      $newhash = hash ( "sha256" ,$newaeskey);
+      $oldhash      = hash ( "sha256" ,$oldaeskey);
+      $newhash      = hash ( "sha256" ,$newaeskey);
       $newhashstore = hash ( "sha256" ,$newhash);
       // uncrypt passwords for update
-      $query_="SELECT *
-               FROM `glpi_plugin_accounts_accounts`
-               WHERE ";
+      $query_= "SELECT *
+                FROM `glpi_plugin_accounts_accounts`
+                WHERE ";
       $query_.= getEntitiesRestrictRequest(" ","glpi_plugin_accounts_accounts",'',$entities);
 
       $result_=$DB->query($query_);
@@ -349,7 +350,7 @@ class PluginAccountsHash extends CommonDBTM {
          $self->update(array('id'=>$hash_id,'hash'=>$newhashstore));
 
          if ($aeskey->getFromDBByHash($hash_id) && isset($aeskey->fields["name"])) {
-            $values["id"] = $aeskey->fields["id"];
+            $values["id"]   = $aeskey->fields["id"];
             $values["name"] = $newaeskey;
             $aeskey->update($values);
          }

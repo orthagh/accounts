@@ -461,7 +461,7 @@ function plugin_accounts_postinit() {
 
 function plugin_accounts_AssignToTicket($types) {
 
-   if (plugin_accounts_haveRight("open_ticket","1"))
+   if (Session::haveRigh("plugin_accounts_open_ticket","1"))
       $types['PluginAccountsAccount']= PluginAccountsAccount::getTypeName(2);
 
    return $types;
@@ -525,7 +525,7 @@ function plugin_accounts_getAddSearchOptions($itemtype) {
    $sopt=array();
 
    if (in_array($itemtype, PluginAccountsAccount::getTypes(true))) {
-      if (plugin_accounts_haveRight("accounts","r")) {
+      if (Session::haveRigh("plugin_accounts", READ)) {
          $sopt[1900]['table']          = 'glpi_plugin_accounts_accounts';
          $sopt[1900]['field']          = 'name';
          $sopt[1900]['name']           = PluginAccountsAccount::getTypeName(2)." - ".__('Name');
@@ -572,8 +572,8 @@ function plugin_accounts_addDefaultWhere($type) {
       //       case "PluginExampleExample" :
       case "PluginAccountsAccount" :
          $who=Session::getLoginUserID();
-         if (!plugin_accounts_haveRight("all_users","r")) {
-            if (count($_SESSION["glpigroups"]) && plugin_accounts_haveRight("my_groups","r")) {
+         if (!Session::haveRight("plugin_accounts_all_users", READ)) {
+            if (count($_SESSION["glpigroups"]) && Session::haveRight("plugin_accounts_my_groups", READ)) {
                $first_groups=true;
                $groups="";
                foreach ($_SESSION['glpigroups'] as $val) {

@@ -33,7 +33,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginAccountsAccount_Item extends CommonDBRelation {
 
-   static $rightname = "config";
+   static $rightname = "plugin_accounts";
    
    // From CommonDBRelation
    static public $itemtype_1 = "PluginAccountsAccount";
@@ -44,24 +44,6 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
    static public $items_id_2 = 'items_id';
    static public $take_entity_2 = true ;
    
-   /**
-    * Have I the global right to "create" the Object
-    *
-    * @return booleen
-    **/ /*
-   public static function canCreate() {
-      return ('accounts', 'w');
-   }*/
-   
-   /**
-    * Have I the global right to "view" the Object
-    * Default is true and check entity if the objet is entity assign
-    *
-    * @return booleen
-    **/ /*
-   public static function canView() {
-      return plugin_accounts_haveRight('accounts', 'r');
-   }*/
 
    /**
     * Get the standard massive actions which are forbidden
@@ -118,7 +100,7 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
             return _n('Associated item', 'Associated items', 2);
 
          } else if (in_array($item->getType(), PluginAccountsAccount::getTypes(true))
-                  && plugin_accounts_haveRight('accounts', 'r')) {
+                  && Session::haveRigh("plugin_accounts", READ)) {
             if ($_SESSION['glpishow_count_on_tabs']) {
                return self::createTabEntry(PluginAccountsAccount::getTypeName(2),
                         self::countForItem($item));
@@ -420,11 +402,11 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
       if ($item->isNewID($ID)) {
          return false;
       }
-      if (!plugin_accounts_haveRight('accounts', 'r')) {
+      if (!Session::haveRight("plugin_accounts", READ)) {
          return false;
       }
 
-      if (!$item->can($item->fields['id'],'r')) {
+      if (!$item->can($item->fields['id'], READ)) {
          return false;
       }
 
@@ -437,7 +419,7 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
       $is_recursive  = $item->isRecursive();
       $who           = Session::getLoginUserID();
       if (count($_SESSION["glpigroups"]) 
-            && plugin_accounts_haveRight("my_groups","r")) {
+            && Session::haveRigh("plugin_accounts_my_groups","r")) {
          $first_groups=true;
          $groups="";
          foreach ($_SESSION['glpigroups'] as $val) {
@@ -463,7 +445,7 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
 
       $query .= getEntitiesRestrictRequest(" AND","glpi_plugin_accounts_accounts",'','',true);
       
-      if (!plugin_accounts_haveRight("all_users","r")) {
+      if (!Session::haveRigh("plugin_accounts_all_users", READ)) {
          $query.= " AND $ASSIGN ";
       }  
       $query .= " ORDER BY `assocName`";
@@ -511,7 +493,7 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
          echo "<div class='firstbloc'>";       
          
          
-         if (plugin_accounts_haveRight('accounts', 'r')
+         if (Session::haveRight('plugin_accounts', READ)
              && ($nb > count($used))) {
             echo "<form name='account_form$rand' id='account_form$rand' method='post'
                    action='".Toolbox::getItemTypeFormURL('PluginAccountsAccount')."'>";

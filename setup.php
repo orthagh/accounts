@@ -32,23 +32,24 @@ function plugin_init_accounts() {
    global $PLUGIN_HOOKS, $CFG_GLPI;
     
    $PLUGIN_HOOKS['csrf_compliant']['accounts'] = true;
-   $PLUGIN_HOOKS['change_profile']['accounts'] = array('PluginAccountsProfile','changeProfile');
+//   $PLUGIN_HOOKS['change_profile']['accounts'] = array('PluginAccountsProfile','changeProfile');
    $PLUGIN_HOOKS['assign_to_ticket']['accounts'] = true;
     
    if (Session::getLoginUserID()) {
 
       // Params : plugin name - string type - number - attributes
-      Plugin::registerClass('PluginAccountsAccount', array(
-      'linkgroup_types' => true,
-      'linkuser_types' => true,
-      'linkgroup_tech_types' => true,
-      'linkuser_tech_types' => true,
-      'document_types' => true,
-      'ticket_types'         => true,
-      'helpdesk_visible_types' => true,
-      'notificationtemplates_types' => true,
-      'header_types' => true,
-      ));
+      Plugin::registerClass('PluginAccountsAccount', 
+         array('linkgroup_types'             => true,
+               'linkuser_types'              => true,
+               'linkgroup_tech_types'        => true,
+               'linkuser_tech_types'         => true,
+               'document_types'              => true,
+               'ticket_types'                => true,
+               'helpdesk_visible_types'      => true,
+               'notificationtemplates_types' => true,
+               'header_types'                => true
+               )
+      );
 
       Plugin::registerClass('PluginAccountsConfig',
       array('addtabon' => 'CronTask'));
@@ -190,20 +191,6 @@ function plugin_accounts_check_prerequisites() {
 //may display messages or add to message after redirect
 function plugin_accounts_check_config() {
    return true;
-}
-
-function plugin_accounts_haveRight($module,$right) {
-   $matches=array(
-            ""  => array("","r","w"), // ne doit pas arriver normalement
-            "r" => array("r","w"),
-            "w" => array("w"),
-            "1" => array("1"),
-            "0" => array("0","1"), // ne doit pas arriver non plus
-   );
-   if (isset($_SESSION["glpi_plugin_accounts_profile"][$module])
-            &&in_array($_SESSION["glpi_plugin_accounts_profile"][$module],$matches[$right]))
-      return true;
-   else return false;
 }
 
 function plugin_datainjection_migratetypes_accounts($types) {

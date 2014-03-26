@@ -34,17 +34,11 @@ if (!defined('GLPI_ROOT')) {
 // Class for a Dropdown
 class PluginAccountsAccountType extends CommonDropdown {
 
+   static $rightname = "plugin_accounts";
+   
    public static function getTypeName($nb=0) {
 
       return _n('Type of account', 'Types of account', $nb, 'accounts');
-   }
-
-   public static function canCreate() {
-      return plugin_accounts_haveRight('accounts', 'w');
-   }
-
-   public static function canView() {
-      return plugin_accounts_haveRight('accounts', 'r');
    }
 
    public static function transfer($ID, $entity) {

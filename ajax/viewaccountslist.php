@@ -36,8 +36,8 @@ Session::checkLoginUser();
 
 if (isset($_POST["key"])) {
 
-   $options = array('id' => $_POST["id"],
-            'aeskey' => $_POST["key"]);
+   $options = array('id'     => $_POST["id"],
+                    'aeskey' => $_POST["key"]);
 
    $accounts = PluginAccountsReport::queryAccountsList($options);
 

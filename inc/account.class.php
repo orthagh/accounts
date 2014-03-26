@@ -33,8 +33,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginAccountsAccount extends CommonDBTM {
 
-   //static $rightname = "plugin_accounts";
-   static $rightname = "config";
+   static $rightname = "plugin_accounts";
    
    static $types = array('Computer', 'Monitor', 'NetworkEquipment', 'Peripheral',
             'Phone', 'Printer', 'Software', 'SoftwareLicense', 'Entity', 'Contract');
@@ -688,10 +687,13 @@ class PluginAccountsAccount extends CommonDBTM {
                echo "<td>";
                echo $account["name"] . "</td>";
                echo "<td><input type='hidden' name='encrypted_password$$ID' value=''><input type='text' name='hidden_password$$ID' value=\"" . $account["encrypted_password"] . "\"></td>";
-               echo "<td><input type='text' name='aescrypted_key' id= 'aescrypted_key' value='" . $_SESSION['plugin_accounts']['aescrypted_key'] . "' class='' autocomplete='off'>
-               <script type='text/javascript'>var good_hash=\"$hash\";
+               echo "<td><input type='text' name='aescrypted_key' id= 'aescrypted_key' value='" . $_SESSION['plugin_accounts']['aescrypted_key'] . "' class='' autocomplete='off'>";
+               $js = "var good_hash=\"$hash\";
                var hash=SHA256(SHA256(document.getElementById(\"aescrypted_key\").value));
-               document.getElementsByName(\"encrypted_password$$ID\").item(0).value=AESEncryptCtr(document.getElementsByName(\"hidden_password$$ID\").item(0).value,SHA256(document.getElementById(\"aescrypted_key\").value), 256);</script></td>";
+               document.getElementsByName(\"encrypted_password$$ID\").item(0).value=AESEncryptCtr(document.getElementsByName(\"hidden_password$$ID\").item(0).value,SHA256(document.getElementById(\"aescrypted_key\").value), 256)"; 
+               Html::scriptBlock($js);
+               
+               echo "</td>";
                echo "</td></tr>";
             }
          }
@@ -702,7 +704,8 @@ class PluginAccountsAccount extends CommonDBTM {
          echo "</table>";
          Html::closeForm();
       }
-      echo "<br><br><div align='center'><b>" . __('3. If all accounts are migrated, the upgrade is finished', 'accounts') . "</b></div><br><br>";
+      echo "<br><br><div align='center'><b>" . 
+         __('3. If all accounts are migrated, the upgrade is finished', 'accounts') . "</b></div><br><br>";
    }
    
    /**
@@ -782,13 +785,13 @@ class PluginAccountsAccount extends CommonDBTM {
 
       if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
          if ($isadmin) {
-            $actions['Install']    = __('Associate');
-            $actions['Desinstall'] = __('Dissociate');
+            $actions['PluginFusioninventoryComputer'.MassiveAction::CLASS_ACTION_SEPARATOR.'install']    = __('Associate');
+            $actions['PluginFusioninventoryComputer'.MassiveAction::CLASS_ACTION_SEPARATOR.'unsinstall'] = __('Dissociate');
 
             if (Session::haveRight('transfer', READ)
                      && Session::isMultiEntitiesMode()
             ) {
-               $actions['Transfert'] = __('Transfer');
+               $actions['PluginFusioninventoryComputer'.MassiveAction::CLASS_ACTION_SEPARATOR.'transfer'] = __('Transfer');
             }
          }
       }
@@ -796,17 +799,28 @@ class PluginAccountsAccount extends CommonDBTM {
    }
 
    static function showMassiveActionsSubForm(MassiveAction $ma) {
-   Toolbox::logDebug($ma);
+Toolbox::logDebug($ma);
       switch ($ma->getAction()) {
          case 'add_item':
             $PluginAccountsAccount=new PluginAccountsAccount();
-
-            if (in_array($options['itemtype'], PluginAccountsAccount::getTypes(true))) {
-               $PluginAccountsAccount->dropdownAccounts("plugin_accounts_accounts_id");
-               echo "<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value='"._sx('button', 'Post')."'>";
-            }
+            $PluginAccountsAccount->dropdownAccounts("plugin_accounts_accounts_id");
             echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
             return true;
+         case "install" :
+            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
+            echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+            return true;
+            break;
+         case "uninstall" :
+            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
+            echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+            return true;
+            break;
+         case "transfer" :
+            Dropdown::show('Entity');
+            echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+            return true;
+            break;
       }
       return parent::showMassiveActionsSubForm($ma);
    }
@@ -820,17 +834,10 @@ class PluginAccountsAccount extends CommonDBTM {
     * 
     * @return boolean if parameters displayed ?
     **/
+    /*
    public function showSpecificMassiveActionsParameters($input = array()) {
 
       switch ($input['action']) {
-         case "plugin_accounts_add_item":
-            $PluginAccountsAccount=new PluginAccountsAccount();
-
-            if (in_array($options['itemtype'], PluginAccountsAccount::getTypes(true))) {
-               $PluginAccountsAccount->dropdownAccounts("plugin_accounts_accounts_id");
-               echo "<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value='"._sx('button', 'Post')."'>";
-            }
-            return true;
          
          case "Install" :
             Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
@@ -853,7 +860,7 @@ class PluginAccountsAccount extends CommonDBTM {
             break;
       }
       return false;
-   }
+   }*/
 
    /**
     * Do the specific massive actions

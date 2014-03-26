@@ -44,12 +44,12 @@ if (isset($_POST["plugin_accounts_accounttypes_id"])) {
    $use_ajax=false;
    $restrict = "plugin_accounts_accounttypes_id='".$_POST["plugin_accounts_accounttypes_id"]."'
             ".getEntitiesRestrictRequest("AND", "glpi_plugin_accounts_accounts","",$_POST["entity_restrict"],true);
-   if ($CFG_GLPI["use_ajax"] &&
+   if ($CFG_GLPI["use_ajax_autocompletion"] &&
             countElementsInTable('glpi_plugin_accounts_accounts',$restrict )>$CFG_GLPI["ajax_limit_count"]) {
       $use_ajax=true;
    }
 
-
+   $field_id = Html::cleanId($_POST['myname'].$_POST['rand']);
    $params=array('searchText'=>'__VALUE__',
             'plugin_accounts_accounttypes_id'=>$_POST["plugin_accounts_accounttypes_id"],
             'entity_restrict'=>$_POST["entity_restrict"],
@@ -58,8 +58,8 @@ if (isset($_POST["plugin_accounts_accounttypes_id"])) {
             'used'=>$_POST['used']
    );
 
-   $default="<select name='".$_POST["myname"]."'><option value='0'>".Dropdown::EMPTY_VALUE."</option></select>";
-   Ajax::dropdown($use_ajax,"/plugins/accounts/ajax/dropdownAccounts.php",$params,$default,$rand);
+   //$default="<select name='".$_POST["myname"]."'><option value='0'>".Dropdown::EMPTY_VALUE."</option></select>";
+   Html::jsAjaxDropdown($_POST['myname'], $field_id, "/plugins/accounts/ajax/dropdownAccounts.php", $params);
 
 }
 

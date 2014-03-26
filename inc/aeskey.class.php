@@ -32,7 +32,8 @@ if (!defined('GLPI_ROOT')) {
 }
 
 class PluginAccountsAesKey extends CommonDBTM {
-   
+
+   static $rightname = "plugin_accounts";
    /**
     *
     * @var hash
@@ -46,14 +47,6 @@ class PluginAccountsAesKey extends CommonDBTM {
    public static function getTypeName($nb=0) {
 
       return _n('Encryption key','Encryption key',$nb, 'accounts');
-   }
-
-   public static function canCreate() {
-      return plugin_accounts_haveRight('accounts', 'w');
-   }
-
-   public static function canView() {
-      return plugin_accounts_haveRight('accounts', 'r');
    }
 
    public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
