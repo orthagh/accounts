@@ -34,7 +34,9 @@ Session::checkRight("profile","r");
 $prof=new PluginAccountsProfile();
 
 //Save profile
-if (isset ($_POST['update'])) {
+if (isset ($_POST['update']) 
+   && Session::haveRight('profile', UPDATE)) {
+
    $prof->update($_POST);
    Html::back();
 }

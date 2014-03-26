@@ -196,6 +196,18 @@ class PluginAccountsProfile extends Profile {
                                                       'default_class' => 'tab_bg_2',
                                                       'title'         => __('General')));
 
+      echo "<table class='tab_cadre_fixehov'>";
+      echo "<tr class='tab_bg_1'><th colspan='4'>".__('Helpdesk')."</th></tr>\n";
+
+      $effective_rights = ProfileRight::getProfileRights($profiles_id, array('plugin_accounts_open_ticket'));
+      echo "<tr class='tab_bg_2'>";
+      echo "<td width='20%'>".__('Associable items to a ticket')."</td>";
+      echo "<td colspan='5'>";
+      Html::showCheckbox(array('name'    => '_plugin_accounts_open_ticket',
+                               'checked' => $effective_rights['plugin_accounts_open_ticket']));
+      echo "</td></tr>\n";
+      echo "</table>";
+      
       if ($canedit
           && $closeform) {
          echo "<div class='center'>";

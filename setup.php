@@ -31,7 +31,7 @@ along with accounts. If not, see <http://www.gnu.org/licenses/>.
 function plugin_init_accounts() {
    global $PLUGIN_HOOKS, $CFG_GLPI;
     
-   $PLUGIN_HOOKS['csrf_compliant']['accounts'] = true;
+   $PLUGIN_HOOKS['csrf_compliant']['accounts']   = true;
    $PLUGIN_HOOKS['assign_to_ticket']['accounts'] = true;
     
    if (Session::getLoginUserID()) {
@@ -60,18 +60,19 @@ function plugin_init_accounts() {
                && $_SESSION["glpi_plugin_environment_installed"]==1) {
 
          $_SESSION["glpi_plugin_environment_accounts"] = 1;
-         /*
+         
          if (Session::haveRight("config", READ)) {
             $PLUGIN_HOOKS['helpdesk_menu_entry']['accounts'] = '/front/account.php';
-            $PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['title'] = PluginAccountsAccount::getTypeName(2);
-            $PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['page'] = '/plugins/accounts/front/account.php';
-            $PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['links']['search'] = '/plugins/accounts/front/account.php';
+            //$PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['title'] = PluginAccountsAccount::getTypeName(2);
+            //$PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['page'] = '/plugins/accounts/front/account.php';
+            //$PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['links']['search'] = '/plugins/accounts/front/account.php';
             $PLUGIN_HOOKS['redirect_page']['accounts'] = "front/account.form.php";
          }
 
          if (Session::haveRight("plugin_accounts", UPDATE)) {
-            $PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['links']['add'] = '/plugins/accounts/front/account.form.php';
+            //$PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['links']['add'] = '/plugins/accounts/front/account.form.php';
             $PLUGIN_HOOKS['use_massive_action']['accounts'] = 1;
+            /*
             if (Session::haveRight("config", UPDATE) && Session::haveRight("config", UPDATE)) {
                //TODO check it
                $PLUGIN_HOOKS['submenu_entry']['environment']['options']['accounts']['links']["<img src='".
@@ -81,24 +82,24 @@ function plugin_init_accounts() {
                $PLUGIN_HOOKS['submenu_entry']['environment']['options']['hash']['title'] = _n('Encryption key', 'Encryption keys', 2, 'accounts');
                $PLUGIN_HOOKS['submenu_entry']['environment']['options']['hash']['links']['add'] = '/plugins/accounts/front/hash.form.php';
                $PLUGIN_HOOKS['submenu_entry']['environment']['options']['hash']['links']['search'] = '/plugins/accounts/front/hash.php';
-            }
-         }*/
+            }*/
+         }
       } else {
-/*
+
          // Display a menu entry ?
          if (Session::haveRight("config", READ)) {
-            $PLUGIN_HOOKS['menu_entry']['accounts'] = 'front/account.php';
+            //$PLUGIN_HOOKS['menu_entry']['accounts'] = 'front/account.php';
             $PLUGIN_HOOKS['helpdesk_menu_entry']['accounts'] = '/front/account.php';
-            $PLUGIN_HOOKS['submenu_entry']['accounts']['search'] = 'front/account.php';
-            $PLUGIN_HOOKS['redirect_page']['accounts'] = "front/account.form.php";
+            //$PLUGIN_HOOKS['submenu_entry']['accounts']['search'] = 'front/account.php';
+            //$PLUGIN_HOOKS['redirect_page']['accounts'] = "front/account.form.php";
          }
 
          if (Session::haveRight("config", UPDATE)) {
-            $PLUGIN_HOOKS['submenu_entry']['accounts']['add'] = 'front/account.form.php';
-            $PLUGIN_HOOKS['header_entry']['accounts'] = array(__('New account') =>'/plugins/accounts/front/account.form.php');
-            $PLUGIN_HOOKS['header_action']['accounts'] = 'plugin_accounts_header_action';
+            //$PLUGIN_HOOKS['submenu_entry']['accounts']['add'] = 'front/account.form.php';
+            //$PLUGIN_HOOKS['header_entry']['accounts'] = array(__('New account') =>'/plugins/accounts/front/account.form.php');
+            //$PLUGIN_HOOKS['header_action']['accounts'] = 'plugin_accounts_header_action';
             $PLUGIN_HOOKS['use_massive_action']['accounts'] = 1;
-            if (Session::haveRight("config", UPDATE) && Session::haveRight("config", UPDATE)) {
+            /*if (Session::haveRight("config", UPDATE) && Session::haveRight("config", UPDATE)) {
                $PLUGIN_HOOKS['submenu_entry']['accounts']["<img src='".
                         $CFG_GLPI["root_doc"]."/plugins/accounts/pics/cadenas.png' title='".
                         _n('Encryption key', 'Encryption keys', 2)."' alt='"._n('Encryption key', 'Encryption keys', 2, 'accounts')."'>"] = 'front/hash.php';
@@ -106,9 +107,9 @@ function plugin_init_accounts() {
                $PLUGIN_HOOKS['submenu_entry']['accounts']['options']['hash']['title'] = _n('Encryption key', 'Encryption keys', 2, 'accounts');
                $PLUGIN_HOOKS['submenu_entry']['accounts']['options']['hash']['links']['add'] = '/plugins/accounts/front/hash.form.php';
                $PLUGIN_HOOKS['submenu_entry']['accounts']['options']['hash']['links']['search'] = '/plugins/accounts/front/hash.php';
-            }
+            }*/
          }
-*/
+
       }
 
       $PLUGIN_HOOKS["menu_toadd"]['accounts'] = array('assets'  => 'PluginAccountsMenu');

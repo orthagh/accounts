@@ -526,7 +526,7 @@ function plugin_accounts_getAddSearchOptions($itemtype) {
    $sopt=array();
 
    if (in_array($itemtype, PluginAccountsAccount::getTypes(true))) {
-      if (Session::haveRigh("plugin_accounts", READ)) {
+      if (Session::haveRight("plugin_accounts", READ)) {
          $sopt[1900]['table']          = 'glpi_plugin_accounts_accounts';
          $sopt[1900]['field']          = 'name';
          $sopt[1900]['name']           = PluginAccountsAccount::getTypeName(2)." - ".__('Name');
@@ -720,6 +720,7 @@ function plugin_accounts_MassiveActions($type) {
    return array ();
 }
 
+/*
 function plugin_accounts_MassiveActionsProcess($data) {
 
    $account_item = new PluginAccountsAccount_Item();
@@ -750,7 +751,7 @@ function plugin_accounts_MassiveActionsProcess($data) {
          break;
    }
    return $res;
-}
+}*/
 
 //////////////////////////////
 
