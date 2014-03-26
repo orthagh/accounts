@@ -32,23 +32,22 @@ function plugin_init_accounts() {
    global $PLUGIN_HOOKS, $CFG_GLPI;
     
    $PLUGIN_HOOKS['csrf_compliant']['accounts'] = true;
-//   $PLUGIN_HOOKS['change_profile']['accounts'] = array('PluginAccountsProfile','changeProfile');
    $PLUGIN_HOOKS['assign_to_ticket']['accounts'] = true;
     
    if (Session::getLoginUserID()) {
 
       // Params : plugin name - string type - number - attributes
       Plugin::registerClass('PluginAccountsAccount', 
-         array('linkgroup_types'             => true,
-               'linkuser_types'              => true,
-               'linkgroup_tech_types'        => true,
-               'linkuser_tech_types'         => true,
-               'document_types'              => true,
-               'ticket_types'                => true,
-               'helpdesk_visible_types'      => true,
-               'notificationtemplates_types' => true,
-               'header_types'                => true
-               )
+                           array('linkgroup_types'             => true,
+                                 'linkuser_types'              => true,
+                                 'linkgroup_tech_types'        => true,
+                                 'linkuser_tech_types'         => true,
+                                 'document_types'              => true,
+                                 'ticket_types'                => true,
+                                 'helpdesk_visible_types'      => true,
+                                 'notificationtemplates_types' => true,
+                                 'header_types'                => true
+                                 )
       );
 
       Plugin::registerClass('PluginAccountsConfig',
@@ -85,7 +84,7 @@ function plugin_init_accounts() {
             }
          }*/
       } else {
-
+/*
          // Display a menu entry ?
          if (Session::haveRight("config", READ)) {
             $PLUGIN_HOOKS['menu_entry']['accounts'] = 'front/account.php';
@@ -109,7 +108,7 @@ function plugin_init_accounts() {
                $PLUGIN_HOOKS['submenu_entry']['accounts']['options']['hash']['links']['search'] = '/plugins/accounts/front/hash.php';
             }
          }
-
+*/
       }
 
       $PLUGIN_HOOKS["menu_toadd"]['accounts'] = array('assets'  => 'PluginAccountsMenu');

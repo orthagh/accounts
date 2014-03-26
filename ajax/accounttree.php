@@ -37,7 +37,7 @@ Html::header_nocache();
 Session::checkLoginUser();
 
 if (!isset($_GET['target'])) {
-   $_GET['target']=$CFG_GLPI['root_doc']."/plugins/accounts/front/account.php";
+   $_GET['target']=Toolbox::getItemTypeSearchUrl('PluginAccountsAccount');
 }
 
 PluginAccountsAccount::showSelector($_GET['target']);

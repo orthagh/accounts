@@ -36,7 +36,7 @@ $plugin=new plugin;
 if ($plugin->isActivated("environment"))
    Html::header(PluginAccountsAccount::getTypeName(2),'',"plugins","environment","accounts");
 else
-   Html::header(PluginAccountsAccount::getTypeName(2),'',"plugins","accounts");
+   Html::header(PluginAccountsAccount::getTypeName(2),'', "assets","pluginaccountsmenu", "account");
 
 $PluginAccountsHash=new PluginAccountsHash();
 $account=new PluginAccountsAccount();

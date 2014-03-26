@@ -41,7 +41,7 @@ $plugin=new plugin();
 if ($plugin->isActivated("environment"))
    Html::header(PluginAccountsAccount::getTypeName(2),'',"plugins","environment","accounts","hash");
 else
-   Html::header(PluginAccountsAccount::getTypeName(2),'',"plugins","accounts","hash");
+   Html::header(PluginAccountsAccount::getTypeName(2),'',"assets","pluginaccountsmenu", "hash");
 
 if (isset($_POST["add"])) {
    if ($aeskey->canCreate()) {

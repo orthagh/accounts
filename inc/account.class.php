@@ -54,20 +54,20 @@ class PluginAccountsAccount extends CommonDBTM {
     *
     * @return boolean
     **/
-    
+   /*
    public static function canCreate() {
-      return Session::haveRight(static::$rightname, UPDATE);
-    }
+      return Session::haveRight('plugin_accounts', UPDATE);
+    }*/
    
    /**
     * Have I the global right to "view" the Object
     * Default is true and check entity if the objet is entity assign
     * 
     * @return boolean
-    **/ 
+    **/ /* 
    public static function canView() {
-      return Session::haveRight(static::$rightname, READ);
-   }
+      return Session::haveRight('plugin_accounts', READ);
+   }*/
 
    /**
     * Actions done when item is deleted from the database
@@ -96,8 +96,9 @@ class PluginAccountsAccount extends CommonDBTM {
       $tab[1]['name']            = __('Name');
       $tab[1]['datatype']        = 'itemlink';
       $tab[1]['itemlink_type']   = $this->getType();
-      if ($_SESSION['glpiactiveprofile']['interface'] != 'central')
+      if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
          $tab[1]['searchtype']   = 'contains';
+      }
 
       $tab[2]['table']           = 'glpi_plugin_accounts_accounttypes';
       $tab[2]['field']           = 'name';
@@ -109,9 +110,10 @@ class PluginAccountsAccount extends CommonDBTM {
       $tab[3]['table']           = 'glpi_users';
       $tab[3]['field']           = 'name';
       $tab[3]['name']            = __('Affected User', 'accounts');
-      if ($_SESSION['glpiactiveprofile']['interface'] != 'central')
+      if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
          $tab[3]['searchtype']   = 'contains';
-
+      }
+      
       $tab[4]['table']           = $this->getTable();
       $tab[4]['field']           = 'login';
       $tab[4]['name']            = __('Login');
@@ -124,7 +126,6 @@ class PluginAccountsAccount extends CommonDBTM {
       $tab[6]['table']           = $this->getTable();
       $tab[6]['field']           = 'date_expiration';
       $tab[6]['name']            = __('Expiration date');
-      //$tab[6]['datatype']='date'; //use getSpecificValueToDisplay
 
       $tab[7]['table']           = $this->getTable();
       $tab[7]['field']           = 'comment';
@@ -193,9 +194,10 @@ class PluginAccountsAccount extends CommonDBTM {
       $tab[16]['field']          = 'completename';
       $tab[16]['name']           = __('Location');
       $tab[16]['datatype']       = 'dropdown';
-      if ($_SESSION['glpiactiveprofile']['interface'] != 'central')
+      if ($_SESSION['glpiactiveprofile']['interface'] != 'central') {
          $tab[16]['searchtype']  = 'contains';
-
+      }
+         
       $tab[17]['table']          = 'glpi_users';
       $tab[17]['field']          = 'name';
       $tab[17]['linkfield']      = 'users_id_tech';
@@ -321,7 +323,7 @@ class PluginAccountsAccount extends CommonDBTM {
     **/
    public function showForm($ID, $options = array()) {
 
-     // if (!$this->canView()) return false;
+      if (!$this->canView()) return false;
 
       $hashclass = new PluginAccountsHash();
 
@@ -335,10 +337,10 @@ class PluginAccountsAccount extends CommonDBTM {
       }
 /*
       if ($ID > 0) {
-         $this->check($ID, 'r');
-         if (!Session::haveRight("plugin_accounts_all_users", "r")) {
+         $this->check($ID, READ);
+         if (!Session::haveRight("plugin_accounts_all_users", READ)) {
             $access = 0;
-            if (Session::haveRight("plugin_accounts_my_groups", "r")) {
+            if (Session::haveRight("plugin_accounts_my_groups", READ)) {
                if ($this->fields["groups_id"]) {
                   if (count($_SESSION['glpigroups'])
                            && in_array($this->fields["groups_id"], $_SESSION['glpigroups'])
@@ -351,7 +353,7 @@ class PluginAccountsAccount extends CommonDBTM {
                      $access = 1;
                }
             }
-            if (!Session::haveRight("plugin_accounts_my_groups", "r")
+            if (!Session::haveRight("plugin_accounts_my_groups", READ)
                      && $this->fields["users_id"] == Session::getLoginUserID()
             )
                $access = 1;
@@ -361,7 +363,7 @@ class PluginAccountsAccount extends CommonDBTM {
          }
       } else {
          // Create item
-         $this->check(-1, 'w');
+         $this->check(-1, UPDATE);
          $this->getEmpty();
       }
 */
@@ -429,7 +431,7 @@ class PluginAccountsAccount extends CommonDBTM {
                $url = $this->getFormURL();
                echo "&nbsp;<input type='button' id='decrypte_link' name='decrypte' value='" . __s('Uncrypt', 'accounts') . "'
                         class='submit' onclick='return false;'>";
-
+/*
                $js = "
                Ext.get('decrypte_link').on('click', function () {
                var good_hash=\"$hash\";var hash=SHA256(SHA256(document.getElementById(\"aeskey\").value));
@@ -453,7 +455,7 @@ class PluginAccountsAccount extends CommonDBTM {
             }
             });
             });";
-            //echo Html::scriptBlock($js);
+            //echo Html::scriptBlock($js); */
             }
 
             echo "</td>";
@@ -495,7 +497,7 @@ class PluginAccountsAccount extends CommonDBTM {
          echo "<input type='hidden' name='encrypted_password' value='" . $this->fields["encrypted_password"] . "'>";
 
          echo "<input type='text' name='hidden_password' value='' size='30'>";
-         $js = "
+         /*$js = "
          var good_hash=\"$hash\";
          var hash=SHA256(SHA256(document.getElementById(\"aeskey\").value));
          if (hash != good_hash) {
@@ -503,7 +505,7 @@ class PluginAccountsAccount extends CommonDBTM {
       } else {
                   document.getElementsByName(\"hidden_password\").item(0).value=AESDecryptCtr(document.getElementsByName(\"encrypted_password\").item(0).value,SHA256(document.getElementById(\"aeskey\").value), 256)};
          ";
-         echo Html::scriptBlock($js);
+         echo Html::scriptBlock($js);*/
       } else {
 
          echo "<input type='text' name='hidden_password' value='' size='30' >";
@@ -648,8 +650,9 @@ class PluginAccountsAccount extends CommonDBTM {
 
          }
       }
-      //echo "</table>";
-      //echo "</div>";
+      $options['canedit'] = false;
+      $options['candel']  = false;
+      $this->showFormButtons($options);
       Html::closeForm();
 
       return true;
@@ -785,13 +788,13 @@ class PluginAccountsAccount extends CommonDBTM {
 
       if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
          if ($isadmin) {
-            $actions['PluginFusioninventoryComputer'.MassiveAction::CLASS_ACTION_SEPARATOR.'install']    = __('Associate');
-            $actions['PluginFusioninventoryComputer'.MassiveAction::CLASS_ACTION_SEPARATOR.'unsinstall'] = __('Dissociate');
+            $actions['PluginAccountsAccount'.MassiveAction::CLASS_ACTION_SEPARATOR.'install']    = __('Associate');
+            $actions['PluginAccountsAccount'.MassiveAction::CLASS_ACTION_SEPARATOR.'unsinstall'] = __('Dissociate');
 
             if (Session::haveRight('transfer', READ)
                      && Session::isMultiEntitiesMode()
             ) {
-               $actions['PluginFusioninventoryComputer'.MassiveAction::CLASS_ACTION_SEPARATOR.'transfer'] = __('Transfer');
+               $actions['PluginAccountsAccount'.MassiveAction::CLASS_ACTION_SEPARATOR.'transfer'] = __('Transfer');
             }
          }
       }
@@ -799,7 +802,7 @@ class PluginAccountsAccount extends CommonDBTM {
    }
 
    static function showMassiveActionsSubForm(MassiveAction $ma) {
-Toolbox::logDebug($ma);
+
       switch ($ma->getAction()) {
          case 'add_item':
             $PluginAccountsAccount=new PluginAccountsAccount();
@@ -807,12 +810,14 @@ Toolbox::logDebug($ma);
             echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
             return true;
          case "install" :
-            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
+            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true), 
+                                   false, false, 'typeitem');
             echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
             return true;
             break;
          case "uninstall" :
-            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
+            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true), 
+                                   false, false, 'typeitem');
             echo Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
             return true;
             break;
@@ -824,43 +829,51 @@ Toolbox::logDebug($ma);
       }
       return parent::showMassiveActionsSubForm($ma);
    }
-   
+
    /**
-    * Display specific options add action button for massive actions
+    * @since version 0.85
     *
-    * Parameters must not be : itemtype, action, is_deleted, check_itemtype or check_items_id
-    * @param $input array of input datas
-    * @since version 0.84
-    * 
-    * @return boolean if parameters displayed ?
-    **/
-    /*
-   public function showSpecificMassiveActionsParameters($input = array()) {
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+   **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item,
+                                                       array $ids) {
 
-      switch ($input['action']) {
-         
-         case "Install" :
-            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
-            echo "<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value='" . _sx('button', 'Post') . "'>";
-            return true;
-            break;
-         case "Desinstall" :
-            Dropdown::showAllItems("item_item", 0, 0, -1, self::getTypes(true),false,false,'typeitem');
-            echo "<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value='" . _sx('button', 'Post') . "'>";
-            return true;
-            break;
-         case "Transfert" :
-            Dropdown::show('Entity');
-            echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value='" . _sx('button', 'Post') . "'>";
-            return true;
-            break;
+      $group_item = new PluginFusioninventoryDeployGroup_Staticdata();
+      $account_item = new PluginAccountsAccount_Item();
 
-         default :
-            return parent::showSpecificMassiveActionsParameters($input);
+      switch ($ma->getAction()) {
+         case 'install' :
+            $input = $ma->getInput();
+            
+            foreach ($ids as $key) {
+               if ($item->can($key, UPDATE)) {
+                  $values = array('plugin_accounts_accounts_id' => $key,
+                                 'items_id'      => $input["item_item"],
+                                 'itemtype'      => $input['typeitem']);
+                  if ($account_item->add($values)) {
+                     $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_OK);
+                  } else {
+                      $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_KO);
+                  }
+               } else {
+                  $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_NORIGHT);
+                  $ma->addMessage($item->getErrorMessage(ERROR_RIGHT));
+               }
+            }
+            break;
+         case 'uninstall':
+            foreach ($ids as $key) {
+               if ($val == 1) {
+                  if ($account_item->deleteItemByAccountsAndItem($key,$input['item_item'],$input['typeitem'])) {
+                     $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_OK);
+                  } else {
+                      $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_KO);
+                  }
+               }
+            }
             break;
       }
-      return false;
-   }*/
+   }
 
    /**
     * Do the specific massive actions
@@ -872,15 +885,13 @@ Toolbox::logDebug($ma);
     * @return an array of results (nbok, nbko, nbnoright counts)
     **/
    public function doSpecificMassiveActions($input = array()) {
-
-      $res = array('ok' => 0,
-               'ko' => 0,
-               'noright' => 0);
+Toolbox::logDebug($input);
+      $res = array('ok' => 0, 'ko' => 0, 'noright' => 0);
 
       $account_item = new PluginAccountsAccount_Item();
 
       switch ($input['action']) {
-         case "Transfert" :
+         case "transfer" :
             if ($input['itemtype'] == 'PluginAccountsAccount') {
                foreach ($input["item"] as $key => $val) {
                   if ($val == 1) {
@@ -910,7 +921,7 @@ Toolbox::logDebug($ma);
                }
             }
             break;
-         case "Install" :
+         case "install" :
             foreach ($input["item"] as $key => $val) {
                if ($val == 1) {
                   $values = array('plugin_accounts_accounts_id' => $key,
@@ -924,7 +935,7 @@ Toolbox::logDebug($ma);
                }
             }
             break;
-         case "Desinstall" :
+         case "unsinstall" :
             foreach ($input["item"] as $key => $val) {
                if ($val == 1) {
                   if ($account_item->deleteItemByAccountsAndItem($key,$input['item_item'],$input['typeitem'])) {
@@ -1251,7 +1262,7 @@ Toolbox::logDebug($ma);
       }
       return '';
    }
-   
+   /*
    function getRights($interface='central') {
 
       $values = parent::getRights();
@@ -1260,7 +1271,7 @@ Toolbox::logDebug($ma);
          unset($values[UPDATE], $values[DELETE], $values[PURGE]);
       }
       return $values;
-   }
+   }*/
 }
 
 ?>

@@ -34,7 +34,7 @@ if (!isset($_GET["id"])) $_GET["id"] = "";
 $plugin = new Plugin();
 if ($plugin->isActivated("accounts")) {
     
-   Session::checkRight("config","w");
+   Session::checkRight("config", UPDATE);
    $PluginAccountsHash=new PluginAccountsHash();
    $PluginAccountsHash->getFromDB(1);
    $hash=$PluginAccountsHash->fields["hash"];
@@ -49,7 +49,7 @@ if ($plugin->isActivated("accounts")) {
       if ($plugin->isActivated("environment"))
          Html::header(PluginAccountsAccount::getTypeName(2),'',"plugins","environment","accounts");
       else
-         Html::header(PluginAccountsAccount::getTypeName(2),'',"plugins","accounts");
+         Html::header(PluginAccountsAccount::getTypeName(2),'',"assets","pluginaccountsmenu", "account");
 
       if ($_SESSION['glpiactive_entity'] == 0) {
          if ($update==1) {
@@ -65,7 +65,7 @@ if ($plugin->isActivated("accounts")) {
 
    }
 } else {
-   Html::header(__('Setup'),'',"config","plugins");
+   Html::header(__('Setup'),'',"config", "plugins");
    echo "<div align='center'><br><br>";
    echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/warning.png\" alt=\"warning\"><br><br>";
    echo "<b>__('Please activate the plugin', 'accounts')</b></div>";

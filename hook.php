@@ -461,8 +461,9 @@ function plugin_accounts_postinit() {
 
 function plugin_accounts_AssignToTicket($types) {
 
-   if (Session::haveRigh("plugin_accounts_open_ticket","1"))
+   if (Session::haveRight("plugin_accounts_open_ticket", "1")) {
       $types['PluginAccountsAccount']= PluginAccountsAccount::getTypeName(2);
+   }
 
    return $types;
 }
@@ -566,12 +567,9 @@ function plugin_accounts_addLeftJoin($type,$ref_table,$new_table,$linkfield,&$al
 
 function plugin_accounts_addDefaultWhere($type) {
 
-   // Example of default WHERE item to be added
-   // No need of the function if you do not have specific cases
    switch ($type) {
-      //       case "PluginExampleExample" :
       case "PluginAccountsAccount" :
-         $who=Session::getLoginUserID();
+         $who = Session::getLoginUserID();
          if (!Session::haveRight("plugin_accounts_all_users", READ)) {
             if (count($_SESSION["glpigroups"]) && Session::haveRight("plugin_accounts_my_groups", READ)) {
                $first_groups=true;
@@ -587,11 +585,10 @@ function plugin_accounts_addDefaultWhere($type) {
                WHERE `groups_id` IN ($groups)
                )
                OR `glpi_plugin_accounts_accounts`.`users_id` = '$who') ";
-
-            } else { // Only personal ones
-               return " `glpi_plugin_accounts_accounts`.`users_id` = '$who' ";
             }
-         }
+      } else { // Only personal ones
+         return " `glpi_plugin_accounts_accounts`.`users_id` = '$who' ";
+      }
    }
    return "";
 }

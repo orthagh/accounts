@@ -208,16 +208,16 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
       global $DB;
 
       $instID = $account->fields['id'];
-      if (!$account->can($instID,"r")) {
+      if (!$account->can($instID, READ)) {
          return false;
       }
-      $canedit = $account->can($instID,'w');
+      $canedit = $account->can($instID, UPDATE);
 
       $query = "SELECT DISTINCT `itemtype`
-      FROM `glpi_plugin_accounts_accounts_items`
-      WHERE `plugin_accounts_accounts_id` = '$instID'
-      ORDER BY `itemtype`
-      LIMIT ".count(PluginAccountsAccount::getTypes(true));
+                FROM `glpi_plugin_accounts_accounts_items`
+                WHERE `plugin_accounts_accounts_id` = '$instID'
+                ORDER BY `itemtype`
+                LIMIT ".count(PluginAccountsAccount::getTypes(true));
 
       $result = $DB->query($query);
       $number = $DB->numrows($result);
@@ -247,8 +247,8 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
       echo "<div class='spaced'>";
       if ($canedit && $number) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams['item'] = $account;
+         Html::showMassiveActions($massiveactionparams);
       }
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr>";
@@ -378,8 +378,9 @@ class PluginAccountsAccount_Item extends CommonDBRelation {
       }
       echo "</table>";
       if ($canedit && $number) {
-         $paramsma['ontop'] =false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $paramsma['ontop'] = false;
+         $paramsma['item']  = $account;
+         Html::showMassiveActions($paramsma);
          Html::closeForm();
       }
       echo "</div>";
